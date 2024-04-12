@@ -1,12 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { RecoilRoot } from 'recoil';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  createBottomTabNavigator,
+  BottomTabNavigationProp,
+} from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import MainScreen from './src/screen/MainScreen';
 import GameScreen from './src/screen/GameScreen';
 
 const Tab = createBottomTabNavigator();
+
+type RootTabParamList = {
+  main: undefined;
+  game: undefined;
+};
+
+export type RootTabNavigationProp = BottomTabNavigationProp<RootTabParamList>;
 
 export default function App() {
   return (

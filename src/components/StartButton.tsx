@@ -1,4 +1,6 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { RootTabNavigationProp } from '../../App';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -19,8 +21,14 @@ const styles = StyleSheet.create({
 });
 
 export default function StartButton(): React.JSX.Element {
+  const navigation = useNavigation<RootTabNavigationProp>();
+
+  const onPressStart = () => {
+    navigation.navigate('game');
+  };
+
   return (
-    <Pressable style={styles.wrapper}>
+    <Pressable onPress={onPressStart} style={styles.wrapper}>
       <Text style={styles.text}>START</Text>
     </Pressable>
   );
