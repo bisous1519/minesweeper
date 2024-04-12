@@ -41,14 +41,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const lvs: LvType[] = ['Beginner', 'Intermediate', 'Expert'];
+export const lvs: LvType[] = ['Beginner', 'Intermediate', 'Expert'];
 
 export default function MainScreen(): React.JSX.Element {
-  // export default function MainScreen({
-  //   navigation,
-  // }: TabProps): React.JSX.Element {
-  const [setting, setSetting] = useRecoilState<SettingType>(settingState);
-
   return (
     <RootView propsStyles={styles.container}>
       <View style={styles.titleWrapper}>

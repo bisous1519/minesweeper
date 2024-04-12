@@ -8,6 +8,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import MainScreen from './src/screen/MainScreen';
 import GameScreen from './src/screen/GameScreen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,17 +22,19 @@ export type RootTabNavigationProp = BottomTabNavigationProp<RootTabParamList>;
 export default function App() {
   return (
     <RecoilRoot>
-      <StatusBar style='auto' />
-      <NavigationContainer>
-        <Tab.Navigator
-          initialRouteName='main'
-          screenOptions={{ headerShown: false }}
-          tabBar={() => null}
-        >
-          <Tab.Screen name='main' component={MainScreen} />
-          <Tab.Screen name='game' component={GameScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <StatusBar style='auto' />
+        <NavigationContainer>
+          <Tab.Navigator
+            initialRouteName='main'
+            screenOptions={{ headerShown: false }}
+            tabBar={() => null}
+          >
+            <Tab.Screen name='main' component={MainScreen} />
+            <Tab.Screen name='game' component={GameScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </RecoilRoot>
   );
 }
