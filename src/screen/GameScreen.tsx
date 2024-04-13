@@ -71,6 +71,7 @@ export default function GameScreen(): React.JSX.Element {
           </View>
           <Pressable style={styles.smileWrapper} onPress={onPressSmile}>
             <Text style={styles.smile}>🙂</Text>
+            {/* onPressIn일때 놀라고 out일때 돌아옴, 지뢰면 삐죽 */}
           </Pressable>
           <View style={styles.headerNumberWrapper}>
             <Text style={[styles.headerNumber, { textAlign: 'right' }]}>
