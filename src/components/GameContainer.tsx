@@ -102,6 +102,9 @@ export default function GameContainer({
     // 이미 열린 곳
     if (boardTF[r][c]) return;
 
+    // 플래그 세운 곳
+    if (board[r][c] === FLAG) return;
+
     // 지뢰 밟음
     if (board[r][c] === MINE) {
       onPressMine();
