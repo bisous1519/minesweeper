@@ -8,10 +8,10 @@ import {
 } from 'react-native';
 import RootView from '../components/RootView';
 import StartButton from '../components/StartButton';
-import { LvType, SettingType } from '../atoms/atomType';
+import { LvType, SettingType, StatusType } from '../atoms/atomType';
 import RadioInput from '../components/RadioInput';
 import { useRecoilState } from 'recoil';
-import { settingState, settingInitial } from '../atoms/atoms';
+import { settingState, settingInitial, statusState } from '../atoms/atoms';
 import MinesInput from '../components/MinesInput';
 import { useEffect } from 'react';
 
@@ -53,9 +53,11 @@ export const lvs: LvType[] = ['Beginner', 'Intermediate', 'Expert'];
 
 export default function MainScreen(): React.JSX.Element {
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
+  const [status, setStatus] = useRecoilState<StatusType>(statusState);
 
   useEffect(() => {
     setSetting({ ...settingInitial });
+    setStatus('READY');
   }, []);
   return (
     <RootView propsStyles={styles.container}>

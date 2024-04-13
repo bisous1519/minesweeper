@@ -25,10 +25,8 @@ const styles = StyleSheet.create({
 
 export default function StartButton(): React.JSX.Element {
   const navigation = useNavigation<RootTabNavigationProp>();
-  const [status, setStatus] = useRecoilState<StatusType>(statusState);
 
   const onPressStart = () => {
-    setStatus('READY');
     navigation.navigate('game');
   };
 

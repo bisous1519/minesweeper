@@ -56,9 +56,19 @@ export default function GameScreen(): React.JSX.Element {
   };
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
+
     if (status === 'START') {
-      console.log('시작!');
+      timer = setInterval(() => {
+        setTictoc((prev) => prev + 1);
+        console.log('in', status);
+        if (status !== 'START') {
+          clearInterval(timer);
+        }
+      }, 1000);
     }
+
+    return () => clearInterval(timer);
   }, [status]);
 
   useEffect(() => {
@@ -71,6 +81,10 @@ export default function GameScreen(): React.JSX.Element {
       setStatus('SUCCESS');
     }
   }, [leftCell]);
+
+  useEffect(() => {
+    setTictoc(0);
+  }, []);
   return (
     <RootView>
       <View style={styles.headerContainer}>
