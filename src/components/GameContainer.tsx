@@ -7,25 +7,19 @@ import {
   View,
 } from 'react-native';
 import { Table, TableWrapper, Cell } from 'react-native-table-component';
+import CellButton from './CellButton';
 
 const tableStyles = StyleSheet.create({
   container: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#000',
+    // flex: 1,
+    // borderWidth: 4,
+    // borderLeftWidth: 4,
+    // borderColor: '#000',
     // backgroundColor: 'orange',
   },
   row: {
     flexDirection: 'row',
     // backgroundColor: 'blue',
-  },
-  el: {
-    backgroundColor: '#fff',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    margin: 10,
   },
 });
 
@@ -33,6 +27,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'pink',
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
@@ -48,20 +44,10 @@ export default function GameContainer(): React.JSX.Element {
     new Array(8).fill(null).map(() => new Array(8).fill(0))
   );
 
-  const onPressCell = (el: number, rIdx: number, cIdx: number) => {
-    alert(`${el} (${rIdx}, ${cIdx})`);
-  };
-
   const onLayoutContainer = (e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
     setContainerSize({ width, height });
   };
-
-  const cell = (el: number, rIdx: number, cIdx: number): React.JSX.Element => (
-    <Pressable onPress={() => onPressCell(el, rIdx, cIdx)}>
-      <Text>{el}</Text>
-    </Pressable>
-  );
 
   return (
     <View style={styles.container} onLayout={onLayoutContainer}>
@@ -72,13 +58,14 @@ export default function GameContainer(): React.JSX.Element {
               <Cell
                 key={cIdx}
                 style={[
-                  tableStyles.el,
+                  //   tableStyles.el,
                   {
                     // width: containerSize.width / 8,
                     // height: containerSize.height / 8,
                   },
                 ]}
-                data={cell(el, rIdx, cIdx)}
+                // data={cell(el, rIdx, cIdx)}
+                data={<CellButton el={el} rIdx={rIdx} cIdx={cIdx} />}
               />
             ))}
           </TableWrapper>
