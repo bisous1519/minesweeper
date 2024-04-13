@@ -42,6 +42,8 @@ export default function SmileBottomSheet({
     } else {
       setSetting({
         lv: text as LvType,
+        width: text === 'Beginner' ? 8 : text === 'Intermediate' ? 10 : 14,
+        height: text === 'Beginner' ? 8 : text === 'Intermediate' ? 14 : 32,
         mines: text === 'Beginner' ? 10 : text === 'Intermediate' ? 20 : 40,
       });
     }

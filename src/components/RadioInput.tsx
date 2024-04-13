@@ -29,6 +29,8 @@ export default function RadioInput({
   const onPressLv = () => {
     setSetting({
       lv: curLv,
+      width: curLv === 'Beginner' ? 8 : curLv === 'Intermediate' ? 10 : 14,
+      height: curLv === 'Beginner' ? 8 : curLv === 'Intermediate' ? 14 : 32,
       mines: curLv === 'Beginner' ? 10 : curLv === 'Intermediate' ? 20 : 40,
     });
   };

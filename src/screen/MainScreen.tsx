@@ -1,11 +1,19 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  Pressable,
+  Settings,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import RootView from '../components/RootView';
 import StartButton from '../components/StartButton';
 import { LvType, SettingType } from '../atoms/atomType';
 import RadioInput from '../components/RadioInput';
 import { useRecoilState } from 'recoil';
-import { settingState } from '../atoms/atoms';
+import { settingState, settingInitial } from '../atoms/atoms';
 import MinesInput from '../components/MinesInput';
+import { useEffect } from 'react';
 
 const styles = StyleSheet.create({
   container: {
@@ -44,6 +52,11 @@ const styles = StyleSheet.create({
 export const lvs: LvType[] = ['Beginner', 'Intermediate', 'Expert'];
 
 export default function MainScreen(): React.JSX.Element {
+  const [setting, setSetting] = useRecoilState<SettingType>(settingState);
+
+  useEffect(() => {
+    setSetting({ ...settingInitial });
+  }, []);
   return (
     <RootView propsStyles={styles.container}>
       <View style={styles.titleWrapper}>

@@ -41,8 +41,11 @@ export default function GameScreen(): React.JSX.Element {
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
 
   const [isBottomOpen, setIsBottomOpen] = useState<boolean>(false);
-  const [leftMines, setLeftMines] = useState<number>(0);
+  const [isStarted, setIsStarted] = useState<boolean>(false);
   const [tictoc, setTictoc] = useState<number>(0);
+  const [leftCell, setLeftCell] = useState<number>(
+    setting.width * setting.height
+  );
 
   const onPressSmile = () => {
     setIsBottomOpen((prev) => !prev);
@@ -53,8 +56,20 @@ export default function GameScreen(): React.JSX.Element {
   };
 
   useEffect(() => {
-    setLeftMines(setting.mines);
-  }, []);
+    if (isStarted) {
+      console.log('시작!');
+    }
+  }, [isStarted]);
+
+  useEffect(() => {
+    if (leftCell !== setting.width * setting.height) {
+      setIsStarted(true);
+    }
+
+    if (leftCell === 0 && setting.mines === 0) {
+      alert(`축하! ${tictoc}s`);
+    }
+  }, [leftCell]);
   return (
     <RootView>
       <View style={styles.headerContainer}>
@@ -67,7 +82,7 @@ export default function GameScreen(): React.JSX.Element {
         </Pressable>
         <View style={styles.header}>
           <View style={styles.headerNumberWrapper}>
-            <Text style={styles.headerNumber}>{leftMines}</Text>
+            <Text style={styles.headerNumber}>{setting.mines}</Text>
           </View>
           <Pressable style={styles.smileWrapper} onPress={onPressSmile}>
             <Text style={styles.smile}>🙂</Text>
@@ -80,7 +95,7 @@ export default function GameScreen(): React.JSX.Element {
           </View>
         </View>
       </View>
-      <GameContainer />
+      <GameContainer leftCell={leftCell} setLeftCell={setLeftCell} />
       {isBottomOpen && <SmileBottomSheet setIsBottomOpen={setIsBottomOpen} />}
     </RootView>
   );

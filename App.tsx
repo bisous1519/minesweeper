@@ -30,8 +30,16 @@ export default function App() {
             screenOptions={{ headerShown: false }}
             tabBar={() => null}
           >
-            <Tab.Screen name='main' component={MainScreen} />
-            <Tab.Screen name='game' component={GameScreen} />
+            <Tab.Screen
+              name='main'
+              component={MainScreen}
+              options={{ unmountOnBlur: true }}
+            />
+            <Tab.Screen
+              name='game'
+              component={GameScreen}
+              options={{ unmountOnBlur: true }}
+            />
           </Tab.Navigator>
         </NavigationContainer>
       </GestureHandlerRootView>
