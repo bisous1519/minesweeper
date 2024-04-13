@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { useRecoilState } from 'recoil';
+import { StatusType } from '../atoms/atomType';
+import { statusState } from '../atoms/atoms';
+import { Feather, FontAwesome6 } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -31,6 +35,8 @@ type CellButtonPropsType = {
   onPressCell: (r: number, c: number) => void;
   onLongPressCell: (r: number, c: number) => void;
   isPressed: boolean;
+  finTrigger: { r: number; c: number } | undefined;
+  elOri: number;
 };
 
 export default function CellButton({
@@ -40,22 +46,53 @@ export default function CellButton({
   onPressCell,
   onLongPressCell,
   isPressed,
+  finTrigger,
+  elOri,
 }: CellButtonPropsType): React.JSX.Element {
+  const [status, setStatus] = useRecoilState<StatusType>(statusState);
+
   const MINE = -1;
   const FLAG = -2;
+  const WRONG = -3;
 
   return (
     <Pressable
-      style={[styles.wrapper, isPressed && styles.pressed]}
+      style={[
+        styles.wrapper,
+        isPressed && styles.pressed,
+        finTrigger &&
+          finTrigger.r === rIdx &&
+          finTrigger.c === cIdx && { backgroundColor: '#FF4A4B' },
+      ]}
       onPress={() => onPressCell(rIdx, cIdx)}
       onLongPress={() => onLongPressCell(rIdx, cIdx)}
     >
-      {isPressed && (
-        <Text style={el === 0 && { opacity: 0 }}>
-          {el === FLAG ? '🚩' : el}
-        </Text>
+      {el === FLAG && <Text>🚩</Text>}
+      {el === WRONG && (
+        <>
+          <Text>🚩</Text>
+          {/* <Feather
+            style={{ position: 'absolute' }}
+            name='x'
+            size={30}
+            color='#FF4A4B'
+          /> */}
+          <FontAwesome6
+            style={{
+              position: 'absolute',
+            }}
+            name='xmark'
+            size={28}
+            color='#FF4A4B'
+          />
+        </>
       )}
-      {!isPressed && el === FLAG && <Text>🚩</Text>}
+      {isPressed &&
+        (elOri === MINE ? (
+          <Text>💣</Text>
+        ) : (
+          <Text style={el === 0 && { opacity: 0 }}>{el}</Text>
+        ))}
     </Pressable>
   );
 }

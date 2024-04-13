@@ -18,8 +18,8 @@ import {
 import { Table, TableWrapper, Cell } from 'react-native-table-component';
 import CellButton from './CellButton';
 import { useRecoilState } from 'recoil';
-import { SettingType } from '../atoms/atomType';
-import { settingState } from '../atoms/atoms';
+import { SettingType, StatusType } from '../atoms/atomType';
+import { settingState, statusState } from '../atoms/atoms';
 
 const tableStyles = StyleSheet.create({
   container: {
@@ -55,10 +55,12 @@ export default function GameContainer({
 }: GameContainerPropsType): React.JSX.Element {
   const MINE = -1;
   const FLAG = -2;
+  const WRONG = -3;
   const dr = [-1, -1, 0, 1, 1, 1, 0, -1]; // 상 상우 우 우하 하 하좌 좌 좌상
   const dc = [0, 1, 1, 1, 0, -1, -1, -1];
 
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
+  const [status, setStatus] = useRecoilState<StatusType>(statusState);
   //   const settingW = useMemo(() => setting.width, [setting.width]);
   //   const settingH = useMemo(() => setting.height, [setting.height]);
 
@@ -72,9 +74,26 @@ export default function GameContainer({
   const [board, setBoard] = useState<number[][]>();
   const [boardOri, setBoardOri] = useState<number[][]>();
   const [boardTF, setBoardTF] = useState<boolean[][]>();
+  const [finTrigger, setFinTrigger] = useState<{ r: number; c: number }>();
 
-  const onPressMine = () => {
-    alert('지뢰!');
+  const onPressMine = (r: number, c: number) => {
+    setStatus('OVER');
+    setFinTrigger({ r, c });
+
+    // 모든 mine 자리 누르기, flag 잘못세운데 x하기
+    if (boardOri && boardTF && board) {
+      boardOri.forEach((row, r) =>
+        row.forEach((ori, c) => {
+          if (board[r][c] === FLAG && ori !== MINE) {
+            board[r][c] = WRONG;
+          } else if (board[r][c] !== FLAG && ori === MINE) {
+            boardTF[r][c] = true;
+          }
+        })
+      );
+      setBoard(board.map((row) => [...row]));
+      setBoardTF(boardTF.map((row) => [...row]));
+    }
   };
 
   const onLongPressCell = (r: number, c: number) => {
@@ -97,7 +116,7 @@ export default function GameContainer({
   };
 
   const onPressCell = (r: number, c: number) => {
-    if (!boardTF || !board) return;
+    if (!boardTF || !board || status === 'OVER' || status === 'SUCCESS') return;
 
     // 이미 열린 곳
     if (boardTF[r][c]) return;
@@ -107,7 +126,7 @@ export default function GameContainer({
 
     // 지뢰 밟음
     if (board[r][c] === MINE) {
-      onPressMine();
+      onPressMine(r, c);
       return;
     }
 
@@ -215,6 +234,7 @@ export default function GameContainer({
       <Table style={tableStyles.container}>
         {board &&
           boardTF &&
+          boardOri &&
           board.map((row, rIdx) => (
             <TableWrapper key={rIdx} style={tableStyles.row}>
               {row.map((el, cIdx) => (
@@ -234,6 +254,8 @@ export default function GameContainer({
                       onPressCell={onPressCell}
                       onLongPressCell={onLongPressCell}
                       isPressed={boardTF[rIdx][cIdx]}
+                      finTrigger={finTrigger}
+                      elOri={boardOri[rIdx][cIdx]}
                     />
                   }
                 />

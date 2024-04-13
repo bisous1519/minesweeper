@@ -7,3 +7,5 @@ export type SettingType = {
 
 export type LvType = 'Beginner' | 'Intermediate' | 'Expert';
 
+export type StatusType = 'READY' | 'START' | 'OVER' | 'SUCCESS';
+
