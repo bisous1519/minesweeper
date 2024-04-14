@@ -4,8 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';
-import { SettingType, StatusType } from '../atoms/atomType';
-import { settingState, statusState } from '../atoms/atoms';
+import { CurStatusType, SettingType } from '../atoms/atomType';
+import { curStatusState, settingState } from '../atoms/atoms';
 import GameContainer from '../components/GameContainer';
 import SmileBottomSheet from '../components/SmileBottomSheet';
 
@@ -39,13 +39,11 @@ const styles = StyleSheet.create({
 export default function GameScreen(): React.JSX.Element {
   const navigation = useNavigation();
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
-  const [status, setStatus] = useRecoilState<StatusType>(statusState);
+  const [curStatus, setCurStatus] =
+    useRecoilState<CurStatusType>(curStatusState);
 
   const [isBottomOpen, setIsBottomOpen] = useState<boolean>(false);
   const [tictoc, setTictoc] = useState<number>(0);
-  const [leftCell, setLeftCell] = useState<number>(
-    setting.width * setting.height
-  );
 
   const onPressSmile = () => {
     setIsBottomOpen((prev) => !prev);
@@ -55,36 +53,45 @@ export default function GameScreen(): React.JSX.Element {
     navigation.goBack();
   };
 
+  // 타이머
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
-    if (status === 'START') {
+    if (curStatus.status === 'START') {
       timer = setInterval(() => {
         setTictoc((prev) => prev + 1);
-        if (status !== 'START') {
+        if (curStatus.status !== 'START') {
           clearInterval(timer);
         }
       }, 1000);
     }
 
     return () => clearInterval(timer);
-  }, [status]);
+  }, [curStatus.status]);
 
   useEffect(() => {
-    if (leftCell !== setting.width * setting.height) {
-      setStatus('START');
+    // 셀 하나 클릭하면 시작!
+    if (curStatus.leftCell !== setting.width * setting.height) {
+      setCurStatus({ ...curStatus, status: 'START' });
     }
 
-    if (leftCell === 0 && setting.mines === 0) {
+    // 성공!
+    if (curStatus.leftCell + curStatus.flags === setting.mines) {
       Alert.alert('🎉 축하합니다!', `\n걸린 시간 : ${tictoc}s`, [
         { text: '확인' },
       ]);
-      setStatus('SUCCESS');
+      setCurStatus({ ...curStatus, status: 'SUCCESS' });
     }
-  }, [leftCell]);
+  }, [curStatus.leftCell]);
 
   useEffect(() => {
     setTictoc(0);
+    setCurStatus({
+      status: 'READY',
+      leftCell: setting.width * setting.height,
+      flags: 0,
+      isFlagMode: false,
+    });
   }, []);
   return (
     <RootView>
@@ -99,11 +106,17 @@ export default function GameScreen(): React.JSX.Element {
         </Pressable>
         <View style={styles.header}>
           <View style={styles.headerNumberWrapper}>
-            <Text style={styles.headerNumber}>{setting.mines}</Text>
+            <Text style={styles.headerNumber}>
+              {setting.mines - curStatus.flags}
+            </Text>
           </View>
           <Pressable style={styles.smileWrapper} onPress={onPressSmile}>
             <Text style={styles.smile}>
-              {status === 'OVER' ? '😵' : status === 'SUCCESS' ? '🥳' : '🙂'}
+              {curStatus.status === 'OVER'
+                ? '😵'
+                : curStatus.status === 'SUCCESS'
+                ? '🥳'
+                : '🙂'}
             </Text>
             {/* Todo: onPressIn일때 놀라고 out일때 돌아옴, 지뢰면 삐죽 */}
           </Pressable>
@@ -114,9 +127,10 @@ export default function GameScreen(): React.JSX.Element {
           </View>
         </View>
       </View>
-      <GameContainer leftCell={leftCell} setLeftCell={setLeftCell} />
+      <GameContainer />
       {isBottomOpen && <SmileBottomSheet setIsBottomOpen={setIsBottomOpen} />}
       {/* Todo: 다시시작하기나 다른 난이도 클릭햇을때 진짜? */}
+      {/* Todo:  */}
     </RootView>
   );
 }

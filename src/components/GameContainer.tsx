@@ -18,8 +18,8 @@ import {
 import { Table, TableWrapper, Cell } from 'react-native-table-component';
 import CellButton from './CellButton';
 import { useRecoilState } from 'recoil';
-import { SettingType, StatusType } from '../atoms/atomType';
-import { settingState, statusState } from '../atoms/atoms';
+import { CurStatusType, SettingType } from '../atoms/atomType';
+import { curStatusState, settingState } from '../atoms/atoms';
 
 const tableStyles = StyleSheet.create({
   container: {
@@ -44,15 +44,9 @@ const styles = StyleSheet.create({
   },
 });
 
-type GameContainerPropsType = {
-  leftCell: number;
-  setLeftCell: Dispatch<SetStateAction<number>>;
-};
+type GameContainerPropsType = {};
 
-export default function GameContainer({
-  leftCell,
-  setLeftCell,
-}: GameContainerPropsType): React.JSX.Element {
+export default function GameContainer({}: GameContainerPropsType): React.JSX.Element {
   const MINE = -1;
   const FLAG = -2;
   const WRONG = -3;
@@ -60,7 +54,8 @@ export default function GameContainer({
   const dc = [0, 1, 1, 1, 0, -1, -1, -1];
 
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
-  const [status, setStatus] = useRecoilState<StatusType>(statusState);
+  const [curStatus, setCurStatus] =
+    useRecoilState<CurStatusType>(curStatusState);
   //   const settingW = useMemo(() => setting.width, [setting.width]);
   //   const settingH = useMemo(() => setting.height, [setting.height]);
 
@@ -77,7 +72,7 @@ export default function GameContainer({
   const [finTrigger, setFinTrigger] = useState<{ r: number; c: number }>();
 
   const onPressMine = (r: number, c: number) => {
-    setStatus('OVER');
+    setCurStatus({ ...curStatus, status: 'OVER' });
     setFinTrigger({ r, c });
 
     // 모든 mine 자리 누르기, flag 잘못세운데 x하기
@@ -100,23 +95,41 @@ export default function GameContainer({
     if (board) {
       // 플래그 세우기
       if (board[r][c] !== FLAG) {
+        // flag모드
+        if (!curStatus.isFlagMode) {
+          setCurStatus({ ...curStatus, isFlagMode: true });
+        }
+
         board[r][c] = FLAG;
         setBoard(board.map((row) => [...row]));
-        setSetting({ ...setting, mines: setting.mines - 1 });
-        setLeftCell((prev) => prev - 1);
+        setCurStatus({
+          ...curStatus,
+          flags: curStatus.flags + 1,
+          leftCell: curStatus.leftCell - 1,
+        });
       }
+
       // 플래그 빼기
       else if (boardOri) {
         board[r][c] = boardOri[r][c];
         setBoard(board.map((row) => [...row]));
-        setSetting({ ...setting, mines: setting.mines + 1 });
-        setLeftCell((prev) => prev + 1);
+        setCurStatus({
+          ...curStatus,
+          flags: curStatus.flags - 1,
+          leftCell: curStatus.leftCell + 1,
+        });
       }
     }
   };
 
   const onPressCell = (r: number, c: number) => {
-    if (!boardTF || !board || status === 'OVER' || status === 'SUCCESS') return;
+    if (
+      !boardTF ||
+      !board ||
+      curStatus.status === 'OVER' ||
+      curStatus.status === 'SUCCESS'
+    )
+      return;
 
     // 이미 열린 곳
     if (boardTF[r][c]) return;
@@ -130,19 +143,19 @@ export default function GameContainer({
       return;
     }
 
-    // 빈셀은 아님! 바로 숫자
+    // 빈셀은 아님! 바로 숫자 => 얘만 열기
     if (board[r][c] !== 0) {
       boardTF[r][c] = true;
       setBoardTF(boardTF.map((row) => [...row]));
-      setLeftCell((prev) => prev - 1);
+      setCurStatus({ ...curStatus, leftCell: curStatus.leftCell - 1 });
       return;
     }
 
-    // 빈셀! 0임!!
+    // 빈셀! 0임!! => 인접칸 열기
     let queue = [[r, c]];
     let isVisited = boardTF;
     isVisited[r][c] = true;
-    let tempLeftCell = leftCell - 1;
+    let tempLeftCell = curStatus.leftCell - 1;
 
     let qIdx = 0;
     while (qIdx < queue.length) {
@@ -169,7 +182,7 @@ export default function GameContainer({
     }
 
     setBoardTF(isVisited.map((row) => [...row]));
-    setLeftCell(tempLeftCell);
+    setCurStatus({ ...curStatus, leftCell: tempLeftCell });
   };
 
   const onLayoutContainer = (e: LayoutChangeEvent) => {
@@ -180,6 +193,19 @@ export default function GameContainer({
   const isIn = useCallback((r: number, c: number) => {
     return 0 <= r && r < setting.width && 0 <= c && c < setting.height;
   }, []);
+
+  useEffect(() => {
+    if (curStatus.status === 'SUCCESS') {
+      board?.forEach((row, r) => {
+        row.forEach((el, c) => {
+          if (el === MINE) {
+            board[r][c] = FLAG;
+          }
+        });
+      });
+      setBoard(board?.map((row) => [...row]));
+    }
+  }, [curStatus.status]);
 
   // 게임 초기세팅
   useEffect(() => {

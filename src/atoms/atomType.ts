@@ -5,7 +5,12 @@ export type SettingType = {
   mines: number;
 };
 
-export type LvType = 'Beginner' | 'Intermediate' | 'Expert';
+export type CurStatusType = {
+  status: 'READY' | 'START' | 'OVER' | 'SUCCESS';
+  leftCell: number;
+  flags: number;
+  isFlagMode: boolean;
+};
 
-export type StatusType = 'READY' | 'START' | 'OVER' | 'SUCCESS';
+export type LvType = 'Beginner' | 'Intermediate' | 'Expert';
 

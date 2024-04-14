@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { SettingType, StatusType } from './atomType';
+import { CurStatusType, SettingType } from './atomType';
 
 export const settingInitial: SettingType = {
   lv: 'Beginner',
@@ -8,13 +8,20 @@ export const settingInitial: SettingType = {
   mines: 10,
 };
 
+export const curStatusInitial: CurStatusType = {
+  status: 'READY',
+  leftCell: 64,
+  flags: 0,
+  isFlagMode: false,
+};
+
+export const curStatusState = atom<CurStatusType>({
+  key: 'curStatusState',
+  default: curStatusInitial,
+});
+
 export const settingState = atom<SettingType>({
   key: 'settingState',
   default: settingInitial, // 10, 20, 40
-});
-
-export const statusState = atom<StatusType>({
-  key: 'statusState',
-  default: 'READY',
 });
 

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { StatusType } from '../atoms/atomType';
-import { statusState } from '../atoms/atoms';
 import { Feather, FontAwesome6 } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
@@ -49,8 +47,6 @@ export default function CellButton({
   finTrigger,
   elOri,
 }: CellButtonPropsType): React.JSX.Element {
-  const [status, setStatus] = useRecoilState<StatusType>(statusState);
-
   const MINE = -1;
   const FLAG = -2;
   const WRONG = -3;

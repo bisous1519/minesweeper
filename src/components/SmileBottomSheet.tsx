@@ -8,6 +8,8 @@ import { lvs } from '../screen/MainScreen';
 import { LvType, SettingType } from '../atoms/atomType';
 import { useRecoilState } from 'recoil';
 import { settingState } from '../atoms/atoms';
+import { useNavigation } from '@react-navigation/native';
+import { RootTabNavigationProp } from '../../App';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,13 +35,13 @@ type SmileBottomSheetPropsType = {
 export default function SmileBottomSheet({
   setIsBottomOpen,
 }: SmileBottomSheetPropsType): React.JSX.Element {
+  const navigation = useNavigation<RootTabNavigationProp>();
+
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
   const sheetRef = useRef<BottomSheet>(null);
 
   const onPressEl = (text: string) => {
-    if (text === '다시 시작하기') {
-      setSetting({ ...setting });
-    } else {
+    if (text !== '다시 시작하기') {
       setSetting({
         lv: text as LvType,
         width: text === 'Beginner' ? 8 : text === 'Intermediate' ? 10 : 14,
@@ -47,7 +49,9 @@ export default function SmileBottomSheet({
         mines: text === 'Beginner' ? 10 : text === 'Intermediate' ? 20 : 40,
       });
     }
+
     setIsBottomOpen(false);
+    navigation.navigate('game');
   };
 
   //   const renderbackdrop = useCallback((props) => {
