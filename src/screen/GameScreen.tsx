@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import RootView from '../components/RootView';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -61,7 +61,6 @@ export default function GameScreen(): React.JSX.Element {
     if (status === 'START') {
       timer = setInterval(() => {
         setTictoc((prev) => prev + 1);
-        console.log('in', status);
         if (status !== 'START') {
           clearInterval(timer);
         }
@@ -77,7 +76,9 @@ export default function GameScreen(): React.JSX.Element {
     }
 
     if (leftCell === 0 && setting.mines === 0) {
-      alert(`축하! ${tictoc}s`);
+      Alert.alert('🎉 축하합니다!', `\n걸린 시간 : ${tictoc}s`, [
+        { text: '확인' },
+      ]);
       setStatus('SUCCESS');
     }
   }, [leftCell]);
