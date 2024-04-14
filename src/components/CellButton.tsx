@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { Feather, FontAwesome6 } from '@expo/vector-icons';

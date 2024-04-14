@@ -27,7 +27,7 @@ const tableStyles = StyleSheet.create({
     // borderWidth: 4,
     // borderLeftWidth: 4,
     // borderColor: '#000',
-    // backgroundColor: 'orange',
+    backgroundColor: 'orange',
   },
   row: {
     flexDirection: 'row',
@@ -56,18 +56,13 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
   const [curStatus, setCurStatus] =
     useRecoilState<CurStatusType>(curStatusState);
-  const [containerSize, setContainerSize] = useState<{
-    width: number;
-    height: number;
-  }>({
-    width: 0,
-    height: 0,
-  });
   const [cellSize, setCellSize] = useState<number>(40);
   const [board, setBoard] = useState<number[][]>();
   const [boardOri, setBoardOri] = useState<number[][]>();
   const [boardTF, setBoardTF] = useState<boolean[][]>();
   const [finTrigger, setFinTrigger] = useState<{ r: number; c: number }>();
+
+  const containerEl = useRef<View>(null);
 
   const onPressMine = (r: number, c: number) => {
     setCurStatus({ ...curStatus, status: 'OVER' });
@@ -181,11 +176,12 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
 
   const onLayoutContainer = (e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
-    // setContainerSize({ width, height });
+    console.log('!!!! Layout', width, height);
+
     setCellSize(
       Math.min(
-        Math.floor(width / setting.width),
-        Math.floor(height / setting.height)
+        Math.floor(width / setting.height),
+        Math.floor(height / setting.width)
       )
     );
   };
@@ -194,6 +190,7 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
     return 0 <= r && r < setting.width && 0 <= c && c < setting.height;
   }, []);
 
+  // 성공일 때, FLAG 안꽂은 자리에 다 꽂아서 보여주기
   useEffect(() => {
     if (curStatus.status === 'SUCCESS') {
       board?.forEach((row, r) => {
@@ -256,7 +253,12 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
   }, [board]);
 
   return (
-    <View style={styles.container} onLayout={onLayoutContainer}>
+    <View
+      style={styles.container}
+      ref={containerEl}
+      collapsable={false}
+      onLayout={onLayoutContainer}
+    >
       <Table style={tableStyles.container}>
         {board &&
           boardTF &&

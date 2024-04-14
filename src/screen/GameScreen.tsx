@@ -101,6 +101,7 @@ export default function GameScreen(): React.JSX.Element {
       flags: 0,
       isFlagMode: false,
     });
+    console.log('!!!!!!', setting.width, setting.height);
   }, []);
   return (
     <RootView>

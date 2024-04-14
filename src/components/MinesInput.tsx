@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { SettingType } from '../atoms/atomType';
 import { settingState } from '../atoms/atoms';
 import { AntDesign } from '@expo/vector-icons';
+import NumberInput from './NumberInput';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
     fontSize: 23,
   },
   button: {
-    backgroundColor: '#f7e1e5',
+    backgroundColor: '#f4e0e0',
     width: 38,
     height: 38,
     borderRadius: 38,
@@ -50,15 +51,11 @@ export default function MinesInput(): React.JSX.Element {
   };
 
   return (
-    <View style={styles.container}>
-      <Pressable style={styles.button} onPress={onPressMinus}>
-        <AntDesign name='minus' size={30} color='black' />
-      </Pressable>
-      <Text style={styles.value}>{setting.mines}</Text>
-      <Pressable style={styles.button} onPress={onPressPlus}>
-        <AntDesign name='plus' size={25} color='black' />
-      </Pressable>
-    </View>
+    <NumberInput
+      onPressMinus={onPressMinus}
+      onPressPlus={onPressPlus}
+      value={setting.mines}
+    />
   );
 }
 

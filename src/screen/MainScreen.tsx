@@ -22,12 +22,12 @@ import { useEffect } from 'react';
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 80,
-    // alignItems: 'center',
+    paddingHorizontal: 50,
     justifyContent: 'center',
   },
   titleWrapper: {
     marginBottom: 40,
+    marginHorizontal: 25,
   },
   title1: {
     fontSize: 50,
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     fontSize: 50,
   },
   eachView: {
-    marginBottom: 35,
+    marginBottom: 25,
     // alignItems: 'center',
   },
   subject: {
@@ -54,12 +54,25 @@ const styles = StyleSheet.create({
   },
 });
 
-export const lvs: LvType[] = ['Beginner', 'Intermediate', 'Expert'];
+export const lvs: LvType[] = ['Beginner', 'Intermediate', 'Expert', 'Custom'];
+const lvsSize: string[] = ['(8x8)', '(10x14)', '(14x32)', ''];
 
 export default function MainScreen(): React.JSX.Element {
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
   const [curStatus, setCurStatus] =
     useRecoilState<CurStatusType>(curStatusState);
+
+  const onPressLv = (curLv: LvType) => {
+    if (curLv === 'Beginner') {
+      setSetting({ lv: curLv, width: 8, height: 8, mines: 10 });
+    } else if (curLv === 'Intermediate') {
+      setSetting({ lv: curLv, width: 10, height: 14, mines: 20 });
+    } else if (curLv === 'Expert') {
+      setSetting({ lv: curLv, width: 14, height: 32, mines: 40 });
+    } else {
+      setSetting({ lv: curLv, width: 10, height: 18, mines: 5 });
+    }
+  };
 
   useEffect(() => {
     setSetting({ ...settingInitial });
@@ -76,7 +89,13 @@ export default function MainScreen(): React.JSX.Element {
         <FlatList
           contentContainerStyle={styles.lvsWrapper}
           data={lvs}
-          renderItem={({ item }) => <RadioInput curLv={item} />}
+          renderItem={({ item, index }) => (
+            <RadioInput
+              onPressLv={onPressLv}
+              curLv={item}
+              size={lvsSize[index]}
+            />
+          )}
         />
       </View>
       <View style={styles.eachView}>

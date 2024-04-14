@@ -12,5 +12,5 @@ export type CurStatusType = {
   isFlagMode: boolean;
 };
 
-export type LvType = 'Beginner' | 'Intermediate' | 'Expert';
+export type LvType = 'Beginner' | 'Intermediate' | 'Expert' | 'Custom';
 

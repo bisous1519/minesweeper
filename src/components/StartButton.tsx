@@ -4,7 +4,7 @@ import { RootTabNavigationProp } from '../../App';
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: '#ffadba',
+    backgroundColor: '#FF4B4D',
     paddingVertical: 15,
     // paddingHorizontal: 40,
     justifyContent: 'center',
@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 27,
+    color: '#fff',
   },
 });
 
