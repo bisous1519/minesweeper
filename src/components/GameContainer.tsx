@@ -56,9 +56,6 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
   const [curStatus, setCurStatus] =
     useRecoilState<CurStatusType>(curStatusState);
-  //   const settingW = useMemo(() => setting.width, [setting.width]);
-  //   const settingH = useMemo(() => setting.height, [setting.height]);
-
   const [containerSize, setContainerSize] = useState<{
     width: number;
     height: number;
@@ -66,6 +63,7 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
     width: 0,
     height: 0,
   });
+  const [cellSize, setCellSize] = useState<number>(40);
   const [board, setBoard] = useState<number[][]>();
   const [boardOri, setBoardOri] = useState<number[][]>();
   const [boardTF, setBoardTF] = useState<boolean[][]>();
@@ -183,7 +181,13 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
 
   const onLayoutContainer = (e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
-    setContainerSize({ width, height });
+    // setContainerSize({ width, height });
+    setCellSize(
+      Math.min(
+        Math.floor(width / setting.width),
+        Math.floor(height / setting.height)
+      )
+    );
   };
 
   const isIn = useCallback((r: number, c: number) => {
@@ -273,6 +277,7 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
                       el={el}
                       rIdx={rIdx}
                       cIdx={cIdx}
+                      size={cellSize}
                       onPressCell={onPressCell}
                       onLongPressCell={onLongPressCell}
                       isPressed={boardTF[rIdx][cIdx]}

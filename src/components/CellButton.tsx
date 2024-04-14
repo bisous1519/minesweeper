@@ -7,9 +7,9 @@ const styles = StyleSheet.create({
   wrapper: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 40,
-    height: 40,
-    borderWidth: 5,
+    // width: 40,
+    // height: 40,
+    // borderWidth: 5,
     borderTopColor: '#f8f8f8',
     borderLeftColor: '#f8f8f8',
     backgroundColor: '#e6e6e6',
@@ -30,6 +30,7 @@ type CellButtonPropsType = {
   el: number;
   rIdx: number;
   cIdx: number;
+  size: number;
   onPressCell: (r: number, c: number) => void;
   onLongPressCell: (r: number, c: number) => void;
   isPressed: boolean;
@@ -41,6 +42,7 @@ export default function CellButton({
   el,
   rIdx,
   cIdx,
+  size,
   onPressCell,
   onLongPressCell,
   isPressed,
@@ -55,6 +57,7 @@ export default function CellButton({
     <Pressable
       style={[
         styles.wrapper,
+        { width: size, height: size, borderWidth: 5 * (size / 46) },
         isPressed && styles.pressed,
         finTrigger &&
           finTrigger.r === rIdx &&
@@ -63,25 +66,29 @@ export default function CellButton({
       onPress={() => onPressCell(rIdx, cIdx)}
       onLongPress={() => onLongPressCell(rIdx, cIdx)}
     >
-      {el === FLAG && <Text>🚩</Text>}
+      {el === FLAG && <Text style={{ fontSize: 25 * (size / 46) }}>🚩</Text>}
       {el === WRONG && (
         <>
-          <Text>🚩</Text>
+          <Text style={{ fontSize: 25 * (size / 46) }}>🚩</Text>
           <FontAwesome6
             style={{
               position: 'absolute',
             }}
             name='xmark'
-            size={28}
+            size={35 * (size / 46)}
             color='#FF4A4B'
           />
         </>
       )}
       {isPressed &&
         (elOri === MINE ? (
-          <Text>💣</Text>
+          <Text style={{ fontSize: 25 * (size / 46) }}>💣</Text>
         ) : (
-          <Text style={el === 0 && { opacity: 0 }}>{el}</Text>
+          <Text
+            style={[{ fontSize: 25 * (size / 46) }, el === 0 && { opacity: 0 }]}
+          >
+            {el}
+          </Text>
         ))}
     </Pressable>
   );
