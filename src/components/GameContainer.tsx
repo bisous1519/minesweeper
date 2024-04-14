@@ -95,17 +95,13 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
     if (board) {
       // 플래그 세우기
       if (board[r][c] !== FLAG) {
-        // flag모드
-        if (!curStatus.isFlagMode) {
-          setCurStatus({ ...curStatus, isFlagMode: true });
-        }
-
         board[r][c] = FLAG;
         setBoard(board.map((row) => [...row]));
         setCurStatus({
           ...curStatus,
           flags: curStatus.flags + 1,
           leftCell: curStatus.leftCell - 1,
+          isFlagMode: true,
         });
       }
 

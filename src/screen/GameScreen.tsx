@@ -77,9 +77,13 @@ export default function GameScreen(): React.JSX.Element {
 
     // 성공!
     if (curStatus.leftCell + curStatus.flags === setting.mines) {
-      Alert.alert('🎉 축하합니다!', `\n걸린 시간 : ${tictoc}s`, [
-        { text: '확인' },
-      ]);
+      Alert.alert(
+        '🎉 축하합니다!',
+        `\n모드 : ${
+          curStatus.isFlagMode ? 'flag mode' : 'non-flag mode'
+        }\n걸린 시간 : ${tictoc}s`,
+        [{ text: '확인' }]
+      );
       setCurStatus({ ...curStatus, status: 'SUCCESS' });
     }
   }, [curStatus.leftCell]);
