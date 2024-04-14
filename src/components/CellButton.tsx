@@ -67,12 +67,6 @@ export default function CellButton({
       {el === WRONG && (
         <>
           <Text>🚩</Text>
-          {/* <Feather
-            style={{ position: 'absolute' }}
-            name='x'
-            size={30}
-            color='#FF4A4B'
-          /> */}
           <FontAwesome6
             style={{
               position: 'absolute',

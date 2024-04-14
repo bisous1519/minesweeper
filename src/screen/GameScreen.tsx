@@ -66,6 +66,11 @@ export default function GameScreen(): React.JSX.Element {
       }, 1000);
     }
 
+    // 실패!ㅠ
+    else if (curStatus.status === 'OVER') {
+      Alert.alert('💣 실패', `\n걸린 시간 : ${tictoc}s`, [{ text: '확인' }]);
+    }
+
     return () => clearInterval(timer);
   }, [curStatus.status]);
 
