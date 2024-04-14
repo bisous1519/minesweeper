@@ -37,7 +37,7 @@ const tableStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'pink',
+    // backgroundColor: 'pink',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

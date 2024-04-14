@@ -9,6 +9,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import MainScreen from './src/screen/MainScreen';
 import GameScreen from './src/screen/GameScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+// import { Dimensions } from 'react-native';
+
+// export const calSize = (size: number): number => {
+//   return (size * Dimensions.get('window').width) / 375;
+// };
 
 const Tab = createBottomTabNavigator();
 

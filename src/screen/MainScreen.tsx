@@ -5,6 +5,8 @@ import {
   StyleSheet,
   Text,
   View,
+  Dimensions,
+  LayoutChangeEvent,
 } from 'react-native';
 import RootView from '../components/RootView';
 import StartButton from '../components/StartButton';
@@ -18,23 +20,29 @@ import {
   curStatusInitial,
 } from '../atoms/atoms';
 import MinesInput from '../components/MinesInput';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+// import { calSize } from '../../App';
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 50,
     justifyContent: 'center',
+    // alignItems: 'center',
   },
   titleWrapper: {
     marginBottom: 40,
-    marginHorizontal: 25,
   },
   title1: {
     fontSize: 50,
+    transform: [{ translateX: 70 }],
   },
   title2: {
-    textAlign: 'right',
     fontSize: 50,
+    textAlign: 'right',
+    transform: [{ translateX: -70 }],
+  },
+  eachViewWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   eachView: {
     marginBottom: 25,
@@ -49,7 +57,7 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     marginTop: 10,
-    justifyContent: 'center',
+    alignItems: 'center',
     // flexDirection: 'row',
   },
 });
@@ -61,6 +69,8 @@ export default function MainScreen(): React.JSX.Element {
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
   const [curStatus, setCurStatus] =
     useRecoilState<CurStatusType>(curStatusState);
+
+  const [eachViewW, setEachViewW] = useState<number>(0);
 
   const onPressLv = (curLv: LvType) => {
     if (curLv === 'Beginner') {
@@ -74,6 +84,12 @@ export default function MainScreen(): React.JSX.Element {
     }
   };
 
+  const onLayoutFirstEachView = (e: LayoutChangeEvent) => {
+    const { width } = e.nativeEvent.layout;
+    console.log('??', width);
+    setEachViewW(width);
+  };
+
   useEffect(() => {
     setSetting({ ...settingInitial });
     setCurStatus({ ...curStatusInitial });
@@ -84,26 +100,30 @@ export default function MainScreen(): React.JSX.Element {
         <Text style={styles.title1}>Mine🚩</Text>
         <Text style={styles.title2}>sweeper</Text>
       </View>
-      <View style={styles.eachView}>
-        <Text style={styles.subject}>Level</Text>
-        <FlatList
-          contentContainerStyle={styles.lvsWrapper}
-          data={lvs}
-          renderItem={({ item, index }) => (
-            <RadioInput
-              onPressLv={onPressLv}
-              curLv={item}
-              size={lvsSize[index]}
-            />
-          )}
-        />
+      <View style={styles.eachViewWrapper}>
+        <View style={styles.eachView} onLayout={onLayoutFirstEachView}>
+          <Text style={styles.subject}>Level</Text>
+          <FlatList
+            contentContainerStyle={styles.lvsWrapper}
+            data={lvs}
+            renderItem={({ item, index }) => (
+              <RadioInput
+                onPressLv={onPressLv}
+                curLv={item}
+                size={lvsSize[index]}
+              />
+            )}
+          />
+        </View>
       </View>
-      <View style={styles.eachView}>
-        <Text style={styles.subject}>Mines</Text>
-        <MinesInput />
+      <View style={styles.eachViewWrapper}>
+        <View style={[styles.eachView, { width: eachViewW }]}>
+          <Text style={styles.subject}>Mines</Text>
+          <MinesInput />
+        </View>
       </View>
       <View style={styles.buttonWrapper}>
-        <StartButton />
+        <StartButton width={eachViewW} />
       </View>
     </RootView>
   );

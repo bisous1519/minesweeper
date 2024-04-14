@@ -11,12 +11,22 @@ import SmileBottomSheet from '../components/SmileBottomSheet';
 
 const styles = StyleSheet.create({
   headerContainer: {
-    marginBottom: 10,
+    paddingBottom: 10,
+    borderBottomWidth: 4,
+    borderBottomColor: '#b0b0b0',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    alignItems: 'center',
+    // shadowColor: '#b0b0b0',
+    // shadowOffset: { width: 0, height: 5 },
+    // shadowOpacity: 1,
+    // shadowRadius: 0,
   },
   backButton: {
     position: 'absolute',
-    left: 10,
-    top: 5,
+    left: 15,
+    top: '50%',
+    transform: [{ translateY: -15 }],
   },
   header: {
     flexDirection: 'row',

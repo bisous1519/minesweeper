@@ -91,41 +91,34 @@ export default function RadioInput({
   }, [setting]);
 
   return (
-    <>
-      <Pressable style={styles.container} onPress={() => onPressLv(curLv)}>
-        <View style={styles.fingerWrapper}>
-          <Text style={[styles.finger, !isOn && { opacity: 0 }]}>👉</Text>
-        </View>
-        <View
-          style={[
-            styles.levelWrapper,
-            curLv === 'Custom' && { alignItems: 'flex-start' },
-          ]}
-        >
-          <Text style={styles.level}>{curLv}</Text>
-          <Text style={styles.levelSize}>{size}</Text>
-          {curLv === 'Custom' && (
-            // {curLv === 'Custom' && isOn && (
-            <View style={styles.customContainer}>
-              <View style={styles.customWrapper}>
-                <Text style={styles.customText}>가로 : </Text>
-                <CustomInput
-                  isWidth={true}
-                  isActive={setting.lv === 'Custom'}
-                />
-              </View>
-              <View style={styles.customWrapper}>
-                <Text style={styles.customText}>세로 : </Text>
-                <CustomInput
-                  isWidth={false}
-                  isActive={setting.lv === 'Custom'}
-                />
-              </View>
+    <View style={styles.container}>
+      <View style={styles.fingerWrapper}>
+        <Text style={[styles.finger, !isOn && { opacity: 0 }]}>👉</Text>
+      </View>
+      <Pressable
+        style={[
+          styles.levelWrapper,
+          curLv === 'Custom' && { alignItems: 'flex-start' },
+        ]}
+        onPress={() => onPressLv(curLv)}
+      >
+        <Text style={styles.level}>{curLv}</Text>
+        <Text style={styles.levelSize}>{size}</Text>
+        {curLv === 'Custom' && (
+          // {curLv === 'Custom' && isOn && (
+          <View style={styles.customContainer}>
+            <View style={styles.customWrapper}>
+              <Text style={styles.customText}>가로 : </Text>
+              <CustomInput isWidth={true} isActive={setting.lv === 'Custom'} />
             </View>
-          )}
-        </View>
+            <View style={styles.customWrapper}>
+              <Text style={styles.customText}>세로 : </Text>
+              <CustomInput isWidth={false} isActive={setting.lv === 'Custom'} />
+            </View>
+          </View>
+        )}
       </Pressable>
-    </>
+    </View>
   );
 }
 

@@ -21,7 +21,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function StartButton(): React.JSX.Element {
+export default function StartButton({
+  width,
+}: {
+  width: number;
+}): React.JSX.Element {
   const navigation = useNavigation<RootTabNavigationProp>();
 
   const onPressStart = () => {
@@ -29,7 +33,7 @@ export default function StartButton(): React.JSX.Element {
   };
 
   return (
-    <Pressable onPress={onPressStart} style={styles.wrapper}>
+    <Pressable onPress={onPressStart} style={[styles.wrapper, { width }]}>
       <Text style={styles.text}>START</Text>
     </Pressable>
   );
