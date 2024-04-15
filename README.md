@@ -34,3 +34,15 @@
 - [x] 지뢰 갯수는 2보다 작게 설정할 수 없습니다.
   - 2보다 작을 시 alert를 띄웁니다.
 
+###
+
+# 구현 화면
+
+<details>
+<summary>미리보기</summary>
+<div markdown="1">       
+  <img src='./assets/mine-sweeper-main.png' alt='main screen' height='400px' />
+  <img src='./assets/mine-sweeper-game.png' alt='game screen' height='400px' />
+</div>
+</details>
+
