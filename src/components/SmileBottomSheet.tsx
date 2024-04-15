@@ -3,7 +3,7 @@ import BottomSheet, {
   BottomSheetFlatList,
 } from '@gorhom/bottom-sheet';
 import { Dispatch, SetStateAction, useRef } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text } from 'react-native';
 import { lvs } from '../screen/MainScreen';
 import { CurStatusType, LvType, SettingType } from '../atoms/atomType';
 import { useRecoilState } from 'recoil';
@@ -43,20 +43,34 @@ export default function SmileBottomSheet({
   const sheetRef = useRef<BottomSheet>(null);
 
   const onPressEl = (text: string) => {
-    setCurStatus({ ...curStatus, status: 'READY' });
+    const onPressYes = () => {
+      setCurStatus({ ...curStatus, status: 'READY' });
 
-    if (text !== '다시 시작하기') {
-      setSetting({
-        lv: text as LvType,
-        width: text === 'Beginner' ? 8 : text === 'Intermediate' ? 10 : 14,
-        height: text === 'Beginner' ? 8 : text === 'Intermediate' ? 14 : 32,
-        mines: text === 'Beginner' ? 10 : text === 'Intermediate' ? 20 : 40,
-      });
+      if (text !== '다시 시작하기') {
+        setSetting({
+          lv: text as LvType,
+          width: text === 'Beginner' ? 8 : text === 'Intermediate' ? 10 : 14,
+          height: text === 'Beginner' ? 8 : text === 'Intermediate' ? 14 : 32,
+          mines: text === 'Beginner' ? 10 : text === 'Intermediate' ? 20 : 40,
+        });
+      }
+
+      setIsBottomOpen(false);
+      console.log('!! game으로 이동!');
+      navigation.reset({ routes: [{ name: 'game' }] });
+    };
+
+    if (text === '다시 시작하기') {
+      Alert.alert('✋ 잠깐!', '정말로 다시 시작할까요?', [
+        { text: '아니요' },
+        { text: '네', style: 'destructive', onPress: () => onPressYes() },
+      ]);
+    } else {
+      Alert.alert('✋ 잠깐!', '난이도를 변경하고 새로 시작할까요?', [
+        { text: '아니요' },
+        { text: '네', style: 'destructive', onPress: () => onPressYes() },
+      ]);
     }
-
-    setIsBottomOpen(false);
-    console.log('!! game으로 이동!');
-    navigation.reset({ routes: [{ name: 'game' }] });
   };
 
   //   const renderbackdrop = useCallback((props) => {

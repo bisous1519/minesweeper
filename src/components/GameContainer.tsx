@@ -10,10 +10,15 @@ import useBoard from '../hooks/useBoard';
 const tableStyles = StyleSheet.create({
   container: {
     // flex: 1,
-    // borderWidth: 4,
-    // borderLeftWidth: 4,
-    // borderColor: '#000',
-    backgroundColor: 'orange',
+    borderTopWidth: 4,
+    borderLeftWidth: 4,
+    borderRightWidth: 4,
+    borderBottomWidth: 4,
+    borderTopColor: '#b0b0b0',
+    borderLeftColor: '#b0b0b0',
+    borderRightColor: '#fff',
+    borderBottomColor: '#fff',
+    // backgroundColor: 'orange',
   },
   row: {
     flexDirection: 'row',
@@ -170,39 +175,41 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
       collapsable={false}
       onLayout={onLayoutContainer}
     >
-      <Table style={tableStyles.container}>
-        {board &&
-          boardTF &&
-          boardOri &&
-          board.map((row, rIdx) => (
-            <TableWrapper key={rIdx} style={tableStyles.row}>
-              {row.map((el, cIdx) => (
-                <Cell
-                  key={cIdx}
-                  style={
-                    {
-                      // width: containerSize.width / 8,
-                      // height: containerSize.height / 8,
+      <View style={tableStyles.container}>
+        <Table>
+          {board &&
+            boardTF &&
+            boardOri &&
+            board.map((row, rIdx) => (
+              <TableWrapper key={rIdx} style={tableStyles.row}>
+                {row.map((el, cIdx) => (
+                  <Cell
+                    key={cIdx}
+                    style={
+                      {
+                        // width: containerSize.width / 8,
+                        // height: containerSize.height / 8,
+                      }
                     }
-                  }
-                  data={
-                    <CellButton
-                      el={el}
-                      rIdx={rIdx}
-                      cIdx={cIdx}
-                      size={cellSize}
-                      onPressCell={onPressCell}
-                      onLongPressCell={onLongPressCell}
-                      isPressed={boardTF[rIdx][cIdx]}
-                      finTrigger={finTrigger}
-                      elOri={boardOri[rIdx][cIdx]}
-                    />
-                  }
-                />
-              ))}
-            </TableWrapper>
-          ))}
-      </Table>
+                    data={
+                      <CellButton
+                        el={el}
+                        rIdx={rIdx}
+                        cIdx={cIdx}
+                        size={cellSize}
+                        onPressCell={onPressCell}
+                        onLongPressCell={onLongPressCell}
+                        isPressed={boardTF[rIdx][cIdx]}
+                        finTrigger={finTrigger}
+                        elOri={boardOri[rIdx][cIdx]}
+                      />
+                    }
+                  />
+                ))}
+              </TableWrapper>
+            ))}
+        </Table>
+      </View>
     </View>
   );
 }

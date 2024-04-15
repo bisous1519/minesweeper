@@ -1,4 +1,11 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import RootView from '../components/RootView';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,15 +19,22 @@ import SmileBottomSheet from '../components/SmileBottomSheet';
 const styles = StyleSheet.create({
   headerContainer: {
     paddingBottom: 10,
-    borderBottomWidth: 4,
-    borderBottomColor: '#b0b0b0',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     alignItems: 'center',
-    // shadowColor: '#b0b0b0',
-    // shadowOffset: { width: 0, height: 5 },
-    // shadowOpacity: 1,
-    // shadowRadius: 0,
+    backgroundColor: '#f0f0f0',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#b0b0b0',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 1,
+        shadowRadius: 0,
+      },
+      android: {
+        borderBottomWidth: 4,
+        borderBottomColor: '#b0b0b0',
+      },
+    }),
   },
   backButton: {
     position: 'absolute',
@@ -60,7 +74,14 @@ export default function GameScreen(): React.JSX.Element {
   };
 
   const onPressBack = () => {
-    navigation.goBack();
+    Alert.alert('✋ 잠깐!', '\n정말 게임을 끝내시겠습니까?', [
+      { text: '취소' },
+      {
+        text: '나가기',
+        style: 'destructive',
+        onPress: () => navigation.goBack(),
+      },
+    ]);
   };
 
   // 타이머
@@ -126,7 +147,6 @@ export default function GameScreen(): React.JSX.Element {
             size={30}
             color='#808080'
           />
-          {/* Todo: 진짜 뒤로가? */}
         </Pressable>
         <View style={styles.header}>
           <View style={styles.headerNumberWrapper}>
@@ -142,7 +162,6 @@ export default function GameScreen(): React.JSX.Element {
                 ? '🥳'
                 : '🙂'}
             </Text>
-            {/* Todo: onPressIn일때 놀라고 out일때 돌아옴, 지뢰면 삐죽 */}
           </Pressable>
           <View style={styles.headerNumberWrapper}>
             <Text style={[styles.headerNumber, { textAlign: 'right' }]}>
@@ -153,8 +172,6 @@ export default function GameScreen(): React.JSX.Element {
       </View>
       <GameContainer />
       {isBottomOpen && <SmileBottomSheet setIsBottomOpen={setIsBottomOpen} />}
-      {/* Todo: 다시시작하기나 다른 난이도 클릭햇을때 진짜? */}
-      {/* Todo:  */}
     </RootView>
   );
 }

@@ -53,6 +53,17 @@ export default function CellButton({
   const FLAG = -2;
   const WRONG = -3;
 
+  const elColor = [
+    '#718DFF',
+    '#3CD5BD',
+    '#ff7171',
+    '#ffd971',
+    '#db71ff',
+    '#b8ff71',
+    '#ff8971',
+    '#FF4B4D',
+  ];
+
   return (
     <Pressable
       style={[
@@ -85,7 +96,10 @@ export default function CellButton({
           <Text style={{ fontSize: 25 * (size / 46) }}>💣</Text>
         ) : (
           <Text
-            style={[{ fontSize: 25 * (size / 46) }, el === 0 && { opacity: 0 }]}
+            style={[
+              { fontSize: 25 * (size / 46), fontWeight: 'bold' },
+              el === 0 ? { opacity: 0 } : { color: elColor[el - 1] },
+            ]}
           >
             {el}
           </Text>
