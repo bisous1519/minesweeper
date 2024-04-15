@@ -1,25 +1,11 @@
-import {
-  Dispatch,
-  RefObject,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import {
-  LayoutChangeEvent,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { useEffect, useState } from 'react';
+import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
 import { Table, TableWrapper, Cell } from 'react-native-table-component';
 import CellButton from './CellButton';
 import { useRecoilState } from 'recoil';
 import { CurStatusType, SettingType } from '../atoms/atomType';
 import { curStatusState, settingState } from '../atoms/atoms';
+import useBoard from '../hooks/useBoard';
 
 const tableStyles = StyleSheet.create({
   container: {
@@ -50,19 +36,22 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
   const MINE = -1;
   const FLAG = -2;
   const WRONG = -3;
-  const dr = [-1, -1, 0, 1, 1, 1, 0, -1]; // 상 상우 우 우하 하 하좌 좌 좌상
-  const dc = [0, 1, 1, 1, 0, -1, -1, -1];
 
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
   const [curStatus, setCurStatus] =
     useRecoilState<CurStatusType>(curStatusState);
+  const {
+    board,
+    setBoard,
+    boardOri,
+    setBoardOri,
+    boardTF,
+    setBoardTF,
+    boardBfs,
+    newBoard,
+  } = useBoard();
   const [cellSize, setCellSize] = useState<number>(40);
-  const [board, setBoard] = useState<number[][]>();
-  const [boardOri, setBoardOri] = useState<number[][]>();
-  const [boardTF, setBoardTF] = useState<boolean[][]>();
   const [finTrigger, setFinTrigger] = useState<{ r: number; c: number }>();
-
-  const containerEl = useRef<View>(null);
 
   const onPressMine = (r: number, c: number) => {
     setCurStatus({ ...curStatus, status: 'OVER' });
@@ -141,37 +130,7 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
     }
 
     // 빈셀! 0임!! => 인접칸 열기
-    let queue = [[r, c]];
-    let isVisited = boardTF;
-    isVisited[r][c] = true;
-    let tempLeftCell = curStatus.leftCell - 1;
-
-    let qIdx = 0;
-    while (qIdx < queue.length) {
-      let size = queue.length - qIdx;
-      while (size-- > 0) {
-        const [r, c] = queue[qIdx++];
-
-        for (let d = 0; d < 8; d++) {
-          const goR = r + dr[d];
-          const goC = c + dc[d];
-
-          if (!isIn(goR, goC)) continue;
-          if (isVisited[goR][goC]) continue;
-          if (board[goR][goC] === MINE) continue;
-          if (board[goR][goC] === FLAG) continue;
-
-          isVisited[goR][goC] = true;
-          tempLeftCell--;
-          if (board[goR][goC] === 0) {
-            queue.push([goR, goC]);
-          }
-        }
-      }
-    }
-
-    setBoardTF(isVisited.map((row) => [...row]));
-    setCurStatus({ ...curStatus, leftCell: tempLeftCell });
+    boardBfs(r, c);
   };
 
   const onLayoutContainer = (e: LayoutChangeEvent) => {
@@ -185,10 +144,6 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
       )
     );
   };
-
-  const isIn = useCallback((r: number, c: number) => {
-    return 0 <= r && r < setting.width && 0 <= c && c < setting.height;
-  }, []);
 
   // 성공일 때, FLAG 안꽂은 자리에 다 꽂아서 보여주기
   useEffect(() => {
@@ -206,56 +161,12 @@ export default function GameContainer({}: GameContainerPropsType): React.JSX.Ele
 
   // 게임 초기세팅
   useEffect(() => {
-    // mines 위치 결정
-    const { mines, width, height } = setting;
-    let minesLoc = [];
-    let tempMap = new Array(width)
-      .fill(null)
-      .map(() => new Array(height).fill(0));
-
-    for (let i = 0; i < mines; i++) {
-      while (true) {
-        const r = Math.floor(Math.random() * width);
-        const c = Math.floor(Math.random() * height);
-
-        if (tempMap[r][c] !== MINE) {
-          minesLoc.push([r, c]); // 위치 저장
-          tempMap[r][c] = MINE; // map에도 저장
-          break;
-        }
-      }
-    }
-
-    console.log('minesLoc', minesLoc);
-
-    // board 완성
-    minesLoc.forEach((row) => {
-      const [r, c] = row;
-      for (let d = 0; d < 8; d++) {
-        const goR = r + dr[d];
-        const goC = c + dc[d];
-
-        if (!isIn(goR, goC)) continue;
-        if (tempMap[goR][goC] === MINE) continue;
-        tempMap[goR][goC]++;
-      }
-    });
-
-    // board에 복제
-    setBoard(tempMap.map((row) => [...row]));
-    setBoardOri(tempMap.map((row) => [...row]));
-    setBoardTF(
-      new Array(width).fill(null).map(() => new Array(height).fill(false))
-    );
+    newBoard();
   }, []);
-  useEffect(() => {
-    console.log('board', board?.map((row) => row.join(' ')).join('\n'));
-  }, [board]);
 
   return (
     <View
       style={styles.container}
-      ref={containerEl}
       collapsable={false}
       onLayout={onLayoutContainer}
     >

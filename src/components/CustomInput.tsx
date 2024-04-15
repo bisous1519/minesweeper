@@ -1,29 +1,9 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { SettingType } from '../atoms/atomType';
 import { settingState } from '../atoms/atoms';
-import { AntDesign } from '@expo/vector-icons';
 import NumberInput from './NumberInput';
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 15,
-  },
-  value: {
-    fontSize: 23,
-  },
-  button: {
-    backgroundColor: '#f4e0e0',
-    width: 38,
-    height: 38,
-    borderRadius: 38,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+import getSize from '../utils/getSize';
 
 type CustomInputPropsType = {
   isWidth: boolean;
@@ -93,12 +73,12 @@ export default function CustomInput({
           ? setting.width
           : setting.height
       }
-      minusFontSize={15}
-      plusFontSize={12}
-      buttonSize={23}
-      numberFontSize={18}
-      width={33}
-      gap={5}
+      minusFontSize={getSize(15)}
+      plusFontSize={getSize(12)}
+      buttonSize={getSize(23)}
+      numberFontSize={getSize(18)}
+      width={getSize(33)}
+      gap={getSize(5)}
       isActive={isActive}
     />
   );

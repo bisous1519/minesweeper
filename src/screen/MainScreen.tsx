@@ -21,7 +21,7 @@ import {
 } from '../atoms/atoms';
 import MinesInput from '../components/MinesInput';
 import { useEffect, useState } from 'react';
-// import { calSize } from '../../App';
+import getSize from '../utils/getSize';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,15 +30,19 @@ const styles = StyleSheet.create({
   },
   titleWrapper: {
     marginBottom: 40,
+    // marginBottom: getSize(40),
   },
   title1: {
-    fontSize: 50,
-    transform: [{ translateX: 70 }],
+    // fontSize: 50,
+    fontSize: getSize(50),
+    textAlign: 'center',
+    transform: [{ translateX: -30 }],
   },
   title2: {
-    fontSize: 50,
-    textAlign: 'right',
-    transform: [{ translateX: -70 }],
+    // fontSize: 50,
+    fontSize: getSize(50),
+    textAlign: 'center',
+    transform: [{ translateX: 30 }],
   },
   eachViewWrapper: {
     flexDirection: 'row',
@@ -49,7 +53,8 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   subject: {
-    fontSize: 27,
+    // fontSize: 27,
+    fontSize: getSize(27),
     marginBottom: 20,
   },
   lvsWrapper: {
@@ -86,7 +91,6 @@ export default function MainScreen(): React.JSX.Element {
 
   const onLayoutFirstEachView = (e: LayoutChangeEvent) => {
     const { width } = e.nativeEvent.layout;
-    console.log('??', width);
     setEachViewW(width);
   };
 

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { RecoilRoot } from 'recoil';
 import {
   createBottomTabNavigator,
@@ -14,6 +14,15 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 // export const calSize = (size: number): number => {
 //   return (size * Dimensions.get('window').width) / 375;
 // };
+
+interface TextWithDefaultProps extends Text {
+  defaultProps?: { allowFontScaling?: boolean };
+}
+
+(Text as unknown as TextWithDefaultProps).defaultProps =
+  (Text as unknown as TextWithDefaultProps).defaultProps || {};
+(Text as unknown as TextWithDefaultProps).defaultProps!.allowFontScaling =
+  false;
 
 const Tab = createBottomTabNavigator();
 

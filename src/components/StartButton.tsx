@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RootTabNavigationProp } from '../../App';
+import getSize from '../utils/getSize';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -16,7 +17,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   text: {
-    fontSize: 27,
+    // fontSize: 27,
+    fontSize: getSize(27),
     color: '#fff',
   },
 });

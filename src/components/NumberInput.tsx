@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { SettingType } from '../atoms/atomType';
 import { settingState } from '../atoms/atoms';
 import { AntDesign } from '@expo/vector-icons';
+import getSize from '../utils/getSize';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,12 +39,12 @@ type NumberInputPropsType = {
 export default function NumberInput({
   onPressMinus,
   onPressPlus,
-  buttonSize = 38,
-  minusFontSize = 30,
-  plusFontSize = 25,
-  numberFontSize = 23,
-  gap = 12,
-  width = 55,
+  buttonSize = getSize(38),
+  minusFontSize = getSize(30),
+  plusFontSize = getSize(25),
+  numberFontSize = getSize(23),
+  gap = getSize(12),
+  width = getSize(55),
   value,
   isActive = true,
 }: NumberInputPropsType): React.JSX.Element {

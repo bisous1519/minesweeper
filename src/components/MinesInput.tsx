@@ -1,29 +1,8 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { SettingType } from '../atoms/atomType';
 import { settingState } from '../atoms/atoms';
-import { AntDesign } from '@expo/vector-icons';
 import NumberInput from './NumberInput';
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 15,
-  },
-  value: {
-    fontSize: 23,
-  },
-  button: {
-    backgroundColor: '#f4e0e0',
-    width: 38,
-    height: 38,
-    borderRadius: 38,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default function MinesInput(): React.JSX.Element {
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);

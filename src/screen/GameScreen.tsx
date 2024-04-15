@@ -91,7 +91,10 @@ export default function GameScreen(): React.JSX.Element {
     }
 
     // 성공!
-    if (curStatus.leftCell + curStatus.flags === setting.mines) {
+    if (
+      curStatus.status === 'START' &&
+      curStatus.leftCell + curStatus.flags === setting.mines
+    ) {
       Alert.alert(
         '🎉 축하합니다!',
         `\n모드 : ${
@@ -104,6 +107,7 @@ export default function GameScreen(): React.JSX.Element {
   }, [curStatus.leftCell]);
 
   useEffect(() => {
+    console.log('!!! gameScreen useEffect');
     setTictoc(0);
     setCurStatus({
       status: 'READY',

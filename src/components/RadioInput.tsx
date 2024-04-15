@@ -13,6 +13,7 @@ import { useRecoilState } from 'recoil';
 import { settingState } from '../atoms/atoms';
 import { useEffect, useState } from 'react';
 import CustomInput from './CustomInput';
+import getSize from '../utils/getSize';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,7 +27,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   finger: {
-    fontSize: 23,
+    // fontSize: 23,
+    fontSize: getSize(23),
   },
   levelWrapper: {
     flexDirection: 'row',
@@ -34,15 +36,13 @@ const styles = StyleSheet.create({
     gap: 7,
   },
   level: {
-    fontSize: 23,
+    // fontSize: 23,
+    fontSize: getSize(23),
   },
   levelSize: {
-    fontSize: 18,
+    // fontSize: 18,
+    fontSize: getSize(18),
     color: '#a0a0a0',
-  },
-  customLevelSize: {
-    fontSize: 18,
-    color: '#000',
   },
   customContainer: {
     marginTop: 4,
@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   customText: {
-    fontSize: 14,
+    // fontSize: 14,
+    fontSize: getSize(14),
     color: '#757575',
   },
 });

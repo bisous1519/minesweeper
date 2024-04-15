@@ -5,9 +5,9 @@ import BottomSheet, {
 import { Dispatch, SetStateAction, useRef } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { lvs } from '../screen/MainScreen';
-import { LvType, SettingType } from '../atoms/atomType';
+import { CurStatusType, LvType, SettingType } from '../atoms/atomType';
 import { useRecoilState } from 'recoil';
-import { settingState } from '../atoms/atoms';
+import { curStatusState, settingState } from '../atoms/atoms';
 import { useNavigation } from '@react-navigation/native';
 import { RootTabNavigationProp } from '../../App';
 
@@ -38,9 +38,13 @@ export default function SmileBottomSheet({
   const navigation = useNavigation<RootTabNavigationProp>();
 
   const [setting, setSetting] = useRecoilState<SettingType>(settingState);
+  const [curStatus, setCurStatus] =
+    useRecoilState<CurStatusType>(curStatusState);
   const sheetRef = useRef<BottomSheet>(null);
 
   const onPressEl = (text: string) => {
+    setCurStatus({ ...curStatus, status: 'READY' });
+
     if (text !== '다시 시작하기') {
       setSetting({
         lv: text as LvType,
@@ -51,7 +55,8 @@ export default function SmileBottomSheet({
     }
 
     setIsBottomOpen(false);
-    navigation.navigate('game');
+    console.log('!! game으로 이동!');
+    navigation.reset({ routes: [{ name: 'game' }] });
   };
 
   //   const renderbackdrop = useCallback((props) => {
